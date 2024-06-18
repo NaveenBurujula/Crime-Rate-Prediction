@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Prediction Bar</title>
+ <style>
+ /* CSS styling */
+ body {
+ font-family: Arial, sans-serif;
+ margin: 20px;
+ background-color: #f2f2f2;
+ }
+ h1 {
+ text-align: center;
+ margin-bottom: 30px;
+ color: #333;
+ }
+ .form-group {
+ margin-bottom: 30px;
+ }
+ label {
+ display: block;
+ font-weight: bold;
+ color: #555;
+ }
+ select,
+ input[type="number"] {
+ width: 100%;
+ padding: 12px;
+ font-size: 16px;
+ border: 1px solid #ccc;
+ border-radius: 5px;
+ box-sizing: border-box;
+ background-color: #fff;
+ color: #333;
+ outline: none;
+ }
+ input[type="submit"] {
+ padding: 12px 30px;
+ background-color: #4CAF50;
+ color: white;
+ border: none;
+ cursor: pointer;
+ font-size: 16px;
+ border-radius: 5px;
+ transition: background-color 0.3s;
+ }
+ input[type="submit"]:hover {
+ background-color: #45a049;
+ }
+ #result {
+ margin-top: 30px;
+ text-align: center;
+ font-weight: bold;
+ font-size: 18px;
+ color: #333;
+ }
+ /* Responsive design */
+ @media (max-width: 768px) {
+ .form-group {
+ margin-bottom: 20px;
+ }
+ label {
+ font-size: 14px;
+ }
+ select,
+ input[type="number"] {
+ padding: 10px;
+ font-size: 14px;
+ }
+ input[type="submit"] {
+ padding: 10px 20px;
+ font-size: 14px;
+ }
+ }
+ </style>
+</head>
+<body>
+ <h1>Crime Rate prediction</h1>
+ <form id="RateForm">
+ <div class="form-group">
+ <label for="City">Name of the City:</label>
+ <select id="City" name="City">
+ <option value="Hyderabad">Hyderabad</option>
+ <option value="Chennai">Chennai</option>
+ <option value="Mumbai">Mumbai</option>
+ <!-- Add more options as needed -->
+ </select>
+ </div>
+ <div class="form-group">
+ <label for="previous">Previous year crime rate:</label>
+ <input type="number" id="previous" name="previous" min="0" step="1" placeholder="Enter previous rate /10">
+ </div>
+ <div class="form-group">
+ <label for="violence">Violence related:</label>
+ <select id="violence" name="violence">
+ <option value="Yes">Yes</option>
+ <option value="No">No</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <label for="Murdered">Murdered related:</label>
+ <select id="Murdered" name="Murdered">
+ <option value="Yes">Yes</option>
+ <option value="No">No</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <label for="Robbery">Robbery related:</label>
+ <select id="Robbery" name="Robbery">
+ <option value="Yes">Yes</option>
+ <option value="No">No</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <label for="Sexual">Sexual related:</label>
+ <select id="Sexual" name="Sexual">
+ <option value="Yes">Yes</option>
+ <option value="No">No</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <label for="Gun">Gun related:</label>
+ <select id="Gun" name="Gun">
+ <option value="Yes">Yes</option>
+ <option value="No">No</option>
+ </select>
+ </div>
+ <div class="form-group">
+ <input type="submit" value="Predict Rate">
+ </div>
+ </form>
+ <div id="result"></div>
+ <script>
+ document.getElementById('RateForm').addEventListener('submit', function(event) {
+ event.preventDefault();
+ calculateRate();
+ });
+
+ function calculateRate() {
+ var City = document.getElementById('City').value;
+ var previous = parseInt(document.getElementById('previous').value);
+ var Violence = document.getElementById('violence').value;
+ var Murdered = document.getElementById('Murdered').value;
+ var Robbery = document.getElementById('Robbery').value;
+ var Sexual = document.getElementById('Sexual').value;
+ var Gun = document.getElementById('Gun').value;
+
+ var baseRate = 1;
+ var violenceFactors = { 'Yes': 5, 'No': 0 };
+ var MurderedFactors = { 'Yes': 8, 'No': 0 };
+ var RobberyFactors = { 'Yes': 7, 'No': 0 };
+ var SexualFactors = { 'Yes': 6, 'No': 0 };
+ var GunFactors = { 'Yes': 8, 'No': 0 };
+
+ var violenceFactor = violenceFactors[Violence];
+ var MurderedFactor = MurderedFactors[Murdered];
+ var RobberyFactor = RobberyFactors[Robbery];
+ var SexualFactor = SexualFactors[Sexual];
+ var GunFactor = GunFactors[Gun];
+
+ if (previous <= 5 && previous >= 0)
+ baseRate += 2;
+ else if (previous <= 10 && previous >= 5)
+ baseRate += 6;
+ else
+ baseRate += 6;
+
+ var predictedRate = baseRate + violenceFactor + MurderedFactor + RobberyFactor + SexualFactor + GunFactor;
+
+ var resultDiv = document.getElementById('result');
+ resultDiv.textContent = 'Predicted Rate: ' + predictedRate.toLocaleString('en-IN');
+ }
+ </script>
+</body>
+</html>
